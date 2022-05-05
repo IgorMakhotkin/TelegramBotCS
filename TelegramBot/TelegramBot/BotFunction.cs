@@ -22,12 +22,12 @@ namespace TelegramBot
 
         public static async Task SaveLinks(ITelegramBotClient botClient, Message message)
         {
-            
+            Console.WriteLine(message);
         }
 
         public static async Task GetLinks(ITelegramBotClient botClient, Message message)
         {
-           
+            Console.WriteLine(message);
         }
     }
 }
