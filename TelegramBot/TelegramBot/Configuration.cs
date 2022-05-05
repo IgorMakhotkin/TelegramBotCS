@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TelegramBot
+﻿namespace TelegramBot
 {
-    internal class Configuration
+    public static class Configuration
     {
+        public static readonly string BotToken = "Token";
     }
 }
