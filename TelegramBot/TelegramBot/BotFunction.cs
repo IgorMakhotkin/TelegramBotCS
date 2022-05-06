@@ -3,7 +3,6 @@ using Telegram.Bot.Types;
 
 namespace TelegramBot
 {
-    public class BotFunction : ICommand
     {
         public static bool SaveLinksFlag { get; private set; } = false;
 
@@ -22,12 +21,10 @@ namespace TelegramBot
 
         public static async Task SaveLinks(ITelegramBotClient botClient, Message message)
         {
-            
         }
 
         public static async Task GetLinks(ITelegramBotClient botClient, Message message)
         {
-           
         }
     }
 }

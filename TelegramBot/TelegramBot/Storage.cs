@@ -1,15 +1,15 @@
 ﻿namespace TelegramBot
 {
-    public class Storage
     {
-        public static string ReturnLinks(string key)
+        public string ReturnLinks(string key)
         {
 
+                    return link == null ? " Запись не найдена" : link;
+                }
+            }
         }
 
-        public static async Task<bool> AddLinksToStorage(string key, string value)
         {
-          
         }
     }
 }
