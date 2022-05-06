@@ -1,8 +1,8 @@
 ﻿namespace TelegramBot
 {
-    public class Storage
+    public class Storage : IStorage
     {
-        public static string ReturnLinks(string key)
+        public string ReturnLinks(string key)
         {
             using (DataBaseContext db = new DataBaseContext())
             {
@@ -36,13 +36,12 @@
             }
         }
 
-        public static async Task<bool> AddLinksToStorage(string key, string value)
+        public async Task<bool> AddLinksToStorage(string key, string value)
         {
             using (DataBaseContext db = new DataBaseContext())
             {
                 Link SaveLink = new Link()
-                {
-                    // id = +1,
+                { 
                     Url = value,
                     Category = key,
                 };

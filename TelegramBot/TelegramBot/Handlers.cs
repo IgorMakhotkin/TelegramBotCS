@@ -5,7 +5,7 @@ using Telegram.Bot.Types.Enums;
 
 namespace TelegramBot
 {
-    public class Handlers : BotFunction
+    public class Handlers
     {
         static async Task Usage(ITelegramBotClient botClient, Message message)
         {
@@ -28,13 +28,13 @@ namespace TelegramBot
 
             if (BotFunction.SaveLinksFlag)
             {
-                await SaveLinks(botClient, message);
+                await BotFunction.SaveLinks(botClient,message);
                 return;
             }
 
             if (BotFunction.GetLinksFlag)
             {
-                await GetLinks(botClient, message);
+                await BotFunction.GetLinks(botClient, message);
                 return;
             }
             else

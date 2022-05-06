@@ -3,7 +3,7 @@ using Telegram.Bot.Types;
 
 namespace TelegramBot
 {
-    public class BotFunction : Storage, ICommand
+    public class BotFunction : ICommand
     {
         public static bool SaveLinksFlag { get; private set; } = false;
 
@@ -19,9 +19,12 @@ namespace TelegramBot
 
         public static string tempCategory { get; private set; } = string.Empty;
 
+        
+
 
         public static async Task SaveLinks(ITelegramBotClient botClient, Message message)
         {
+            IStorage storage = new Storage();
             SaveLinksFlag = true;
 
             if (SaveLinksFlag && !SaveLinksStage1 && !SaveLinksStage2)
@@ -44,7 +47,7 @@ namespace TelegramBot
             {
                 tempCategory = message.Text!;
 
-                if (await Storage.AddLinksToStorage(tempCategory, tempLinks))
+                if (await storage.AddLinksToStorage(tempCategory, tempLinks))
                 {
                     await ICommand.SendMessage("Запись добавлена", message, botClient);
                     SaveLinksStage2 = false;
@@ -63,6 +66,7 @@ namespace TelegramBot
 
         public static async Task GetLinks(ITelegramBotClient botClient, Message message)
         {
+            IStorage storage = new Storage();
             string tempCategory = null;
             GetLinksFlag = true;
 
@@ -76,7 +80,7 @@ namespace TelegramBot
             if (GetLinksStage1)
             {
                 tempCategory = message.Text!;
-                string answer = Storage.ReturnLinks(tempCategory);
+                string answer = storage.ReturnLinks(tempCategory);
                 await ICommand.SendMessage($"Ссылка:{answer}", message, botClient);
                 GetLinksFlag = false;
                 GetLinksStage1 = false;
