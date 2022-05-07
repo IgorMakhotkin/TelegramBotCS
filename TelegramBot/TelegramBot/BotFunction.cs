@@ -22,49 +22,46 @@ namespace TelegramBot
         
 
 
-        public static async Task SaveLinks(ITelegramBotClient botClient, Message message)
+        public static async Task<string> SaveLinks( string message)
         {
             IStorage storage = new Storage();
             SaveLinksFlag = true;
 
             if (SaveLinksFlag && !SaveLinksStage1 && !SaveLinksStage2)
-            {
-                await ICommand.SendMessage("Введите ссылку", message, botClient);
+            { 
                 SaveLinksStage1 = true;
-                return;
+                return "Введите ссылку";
             }
 
             if (SaveLinksStage1)
             {
-                tempLinks = message.Text!;
-                await ICommand.SendMessage("Введите категорию", message, botClient);
+                tempLinks = message!;
                 SaveLinksStage1 = false;
                 SaveLinksStage2 = true;
-                return;
+                return "Введите категорию";
             }
 
             if (SaveLinksStage2)
             {
-                tempCategory = message.Text!;
+                tempCategory = message;
 
                 if (await storage.AddLinksToStorage(tempCategory, tempLinks))
                 {
-                    await ICommand.SendMessage("Запись добавлена", message, botClient);
                     SaveLinksStage2 = false;
                     SaveLinksFlag = false;
-                    return;
+                    return "Запись добавлена";
                 }
                 else
                 {
                     SaveLinksStage2 = false;
                     SaveLinksFlag = false;
-                    await ICommand.SendMessage("Запись не добавлена", message, botClient);
-                    return;
+                    return "Запись не добавлена";
                 }
             }
+            return "Повторите запрос";
         }
 
-        public static async Task GetLinks(ITelegramBotClient botClient, Message message)
+        public static async Task <string> GetLinks( string message)
         {
             IStorage storage = new Storage();
             string tempCategory = null;
@@ -72,20 +69,19 @@ namespace TelegramBot
 
             if (GetLinksFlag && !GetLinksStage1)
             {
-                await ICommand.SendMessage("Какую категорию получить", message, botClient);
                 GetLinksStage1 = true;
-                return;
+                return "Какую категорию получить";
             }
 
             if (GetLinksStage1)
             {
-                tempCategory = message.Text!;
+                tempCategory = message!;
                 string answer = storage.ReturnLinks(tempCategory);
-                await ICommand.SendMessage($"Ссылка:{answer}", message, botClient);
                 GetLinksFlag = false;
                 GetLinksStage1 = false;
-                return;
+                return $"Ссылка:{answer}";
             }
+            return "Повторите запрос";
         }
     }
 }

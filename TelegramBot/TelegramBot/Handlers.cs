@@ -17,6 +17,18 @@ namespace TelegramBot
             return;
         }
 
+        static async Task StoreLink(ITelegramBotClient botClient, Message message)
+        {
+            string answer = await BotFunction.SaveLinks(message.Text!);
+            await ICommand.SendMessage(answer,message,botClient);
+            return;
+        }
+        static async Task GetLink(ITelegramBotClient botClient,Message message)
+        {
+            string answer = await BotFunction.GetLinks(message.Text!);
+            await ICommand.SendMessage(answer,message,botClient);
+            return;
+        }
         private static async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message)
         {
             Console.WriteLine($"Полученый тип сообщения: {message.Type}");
@@ -25,30 +37,30 @@ namespace TelegramBot
                 await ICommand.SendMessage("Введите текст", message, botClient);
                 return;
             }
-
             if (BotFunction.SaveLinksFlag)
             {
-                await BotFunction.SaveLinks(botClient,message);
+                await StoreLink(botClient,message);
                 return;
             }
 
             if (BotFunction.GetLinksFlag)
             {
-                await BotFunction.GetLinks(botClient, message);
+                await GetLink(botClient, message);
                 return;
             }
             else
             {
+
                 var action = message.Text!.Split(' ')[0] switch
                 {
 
                     "/start" => Usage(botClient, message),
-                    "/store_link" => BotFunction.SaveLinks(botClient, message),
-                    "/get_links" => BotFunction.GetLinks(botClient, message),
+                    "/store_link" => StoreLink(botClient, message),
+                    "/get_links" => GetLink(botClient, message)
 
                 };
-
             }
+            
         }
 
         public static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
