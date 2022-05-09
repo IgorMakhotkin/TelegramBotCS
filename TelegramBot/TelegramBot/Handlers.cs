@@ -6,34 +6,27 @@ using Telegram.Bot.Types.Enums;
 namespace TelegramBot
 {
     {
-        static async Task Usage(ITelegramBotClient botClient, Message message)
         {
             const string usage = "Функции:\n" +
                                  "/store_link   - записать ссылку\n" +
                                  "/get_links - получить ссылку\n";
 
-            await ICommand.SendMessage(usage, message, botClient);
             return;
         }
 
-        private static async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message)
         {
             Console.WriteLine($"Полученый тип сообщения: {message.Type}");
             if (message.Type != MessageType.Text)
             {
-                await ICommand.SendMessage("Введите текст", message, botClient);
                 return;
             }
-
             if (BotFunction.SaveLinksFlag)
             {
-                await BotFunction.SaveLinks(botClient,message);
                 return;
             }
 
             if (BotFunction.GetLinksFlag)
             {
-                await BotFunction.GetLinks(botClient, message);
                 return;
             }
             else
@@ -41,9 +34,6 @@ namespace TelegramBot
                 var action = message.Text!.Split(' ')[0] switch
                 {
 
-                    "/start" => Usage(botClient, message),
-                    "/store_link" => BotFunction.SaveLinks(botClient, message),
-                    "/get_links" => BotFunction.GetLinks(botClient, message),
 
                 };
 
@@ -73,8 +63,6 @@ namespace TelegramBot
             var handler = update.Type switch
             {
 
-                UpdateType.Message => BotOnMessageReceived(botClient, update.Message!),
-                UpdateType.EditedMessage => BotOnMessageReceived(botClient, update.EditedMessage!),
                 _ => UnknownUpdateHandlerAsync(botClient, update)
             };
 

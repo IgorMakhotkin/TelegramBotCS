@@ -5,9 +5,6 @@ namespace TelegramBot
 {
     public class DataBaseContext : DbContext
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DataBaseContext"/> class.
-        /// </summary>
         public DataBaseContext()
         {
             Database.EnsureCreated();
