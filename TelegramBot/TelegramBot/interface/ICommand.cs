@@ -5,7 +5,9 @@ namespace TelegramBot
 {
     public interface ICommand
     {
-        // Команда отправки сообщений
-        public Task SendMessage(string messageToSend, Message receivedMessage, ITelegramBotClient client);
+        // Обьявление обобшенного метода отправки сообщений
+        public Task SendMessage< TMessage, TClient>(string messageToSend, TMessage receivedMessage, TClient client)
+            where TMessage : Message
+            where TClient : ITelegramBotClient;
     }
 }
