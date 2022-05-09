@@ -40,12 +40,12 @@
         {
             using (DataBaseContext db = new DataBaseContext())
             {
-                Link SaveLink = new Link()
-                { 
+                Link saveLink = new Link()
+                {
                     Url = value,
                     Category = key,
                 };
-                db.Links.Add(SaveLink);
+                db.Links.Add(saveLink);
                 await db.SaveChangesAsync();
                 return true;
             }

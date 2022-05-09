@@ -6,7 +6,7 @@ namespace TelegramBot
     public class Link
     {
         [Key]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         public string? Url { get; set; }
 
