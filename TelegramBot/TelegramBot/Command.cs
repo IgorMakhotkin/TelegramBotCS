@@ -5,13 +5,15 @@ namespace TelegramBot
 {
     public class Command : ICommand
     {
-        // Реализация обобщенного метода 
-       public async Task SendMessage<TMessage, TClient>(string messageToSend, TMessage receivedMessage, TClient client)
-            where TMessage : Message
-            where TClient : ITelegramBotClient
+        // Реализация обобщенного метода
+        public async Task ExecuteAsync<TCommandInput>(TCommandInput input)
+            where TCommandInput : TelegramCommandInput
         {
-            var chatId = receivedMessage.Chat.Id;
-            await client.SendTextMessageAsync(chatId, messageToSend);
+           TelegramCommandInput textInput = input as TelegramCommandInput;
+            await textInput.sendMessage();
+          //  var chatId = textInput.message.Chat.Id;
+          //  await textInput.client.SendTextMessageAsync(chatId, textInput.MessageToSend);
         }
+
     }
 }

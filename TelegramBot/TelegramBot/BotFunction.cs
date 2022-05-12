@@ -1,4 +1,6 @@
+namespace TelegramBot
 {
+    public class BotFunction
     {
         public static bool SaveLinksFlag { get; private set; } = false;
 
