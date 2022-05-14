@@ -11,7 +11,7 @@ namespace TelegramBot
             where TClient : ITelegramBotClient
         {
             var chatId = receivedMessage.Chat.Id;
-            await client.SendTextMessageAsync(chatId, messageToSend);
+           await textInput.sendMessage();
         }
     }
 }

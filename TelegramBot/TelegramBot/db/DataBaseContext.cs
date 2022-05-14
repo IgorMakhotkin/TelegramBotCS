@@ -21,5 +21,6 @@ namespace TelegramBot
         }
 
         public DbSet<Link> Links { get; set; }
+
     }
 }

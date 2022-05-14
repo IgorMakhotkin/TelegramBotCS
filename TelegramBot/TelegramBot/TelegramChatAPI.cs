@@ -10,12 +10,12 @@ namespace TelegramBot
 
         public TelegramChatAPI()
         {
-
+            Handlers hand = new Handlers();
             Bot = new TelegramBotClient(Configuration.BotToken);
             using var cts = new CancellationTokenSource();
             Bot.StartReceiving(
-                updateHandler: Handlers.HandleUpdateAsync,
-                errorHandler: Handlers.HandleErrorAsync,
+                updateHandler: hand.HandleUpdateAsync,
+                errorHandler: hand.HandleErrorAsync,
                 receiverOptions: new ReceiverOptions()
                                {
                     AllowedUpdates = Array.Empty<UpdateType>(),
