@@ -7,11 +7,12 @@ namespace TelegramBot
 {
     public class Handlers
     {
-         private static async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message, ICommand send)
-        {
-            IRepository rep = new Repository(botClient, message, send);
+        Dictionary<long, User> usersDict = new Dictionary<long, User>();
 
-            Console.WriteLine($"Полученый тип сообщения: {message.Type}");
+        private async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message, ICommand send)
+        {
+            Console.WriteLine($"Полученый тип сообщения: {message.Type} {message.MessageId} {message.Chat.Id}");
+
             if (message.Type != MessageType.Text)
             {
                 TelegramCommandInput textInput = new TelegramCommandInput(botClient, message, "Введите текст");
@@ -21,11 +22,14 @@ namespace TelegramBot
 
             if (message.Type == MessageType.Text)
             {
-               await rep.ExecutAsync();
+                CommandFactory factory = new CommandFactory(botClient, message);
+                await factory.NextStepAsync(message, usersDict);
             }
+
+            return;
         }
 
-         public static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        public Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             var errorMessage = exception switch
             {
@@ -37,22 +41,21 @@ namespace TelegramBot
             return Task.CompletedTask;
         }
 
-         private static Task UnknownUpdateHandlerAsync(ITelegramBotClient botClient, Update update)
+        private Task UnknownUpdateHandlerAsync(ITelegramBotClient botClient, Update update)
         {
             Console.WriteLine($"Unknown update type: {update.Type}");
             return Task.CompletedTask;
         }
 
-         public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             ICommand send = new Command();
-
             var handler = update.Type switch
             {
 
-                UpdateType.Message => BotOnMessageReceived(botClient, update.Message!, send),
-                UpdateType.EditedMessage => BotOnMessageReceived(botClient, update.EditedMessage!, send),
-                _ => UnknownUpdateHandlerAsync(botClient, update),
+                UpdateType.Message => this.BotOnMessageReceived(botClient, update.Message!, send),
+                UpdateType.EditedMessage => this.BotOnMessageReceived(botClient, update.EditedMessage!, send),
+                _ => this.UnknownUpdateHandlerAsync(botClient, update),
             };
 
             try
@@ -61,7 +64,7 @@ namespace TelegramBot
             }
             catch (Exception exception)
             {
-                await HandleErrorAsync(botClient, exception, cancellationToken);
+                await this.HandleErrorAsync(botClient, exception, cancellationToken);
             }
         }
     }

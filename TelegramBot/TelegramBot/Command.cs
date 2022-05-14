@@ -10,10 +10,7 @@ namespace TelegramBot
             where TCommandInput : TelegramCommandInput
         {
            TelegramCommandInput textInput = input as TelegramCommandInput;
-            await textInput.sendMessage();
-          //  var chatId = textInput.message.Chat.Id;
-          //  await textInput.client.SendTextMessageAsync(chatId, textInput.MessageToSend);
+           await textInput.sendMessage();
         }
-
     }
 }

@@ -11,24 +11,28 @@ namespace TelegramBot
 
         private Message Message { get; set; }
 
-        public Repository(ITelegramBotClient botClient, Message receivedMessage, ICommand send)
+        public Repository(ITelegramBotClient botClient, Message receivedMessage)
         {
             this.Client = botClient;
             this.Message = receivedMessage;
+            ICommand send = new Command();
             this.Send = send;
         }
 
-        public async Task ExecutAsync()
+        public async Task ExecutAsync(Message message, Dictionary<long, User> usersDict)
         {
-            if (BotFunction.SaveLinksFlag)
+            User user = new User();
+            user = usersDict[message.Chat.Id];
+
+            if (user.SaveLinksFlag)
             {
-                await this.StoreLink(Client, Message, Send);
+                await this.StoreLink(Client, Message, Send, usersDict);
                 return;
             }
 
-            if (BotFunction.GetLinksFlag)
+            if (user.GetLinksFlag)
             {
-                await this.GetLink(Client, Message, Send);
+                await this.GetLink(Client, Message, Send, usersDict);
                 return;
             }
             else
@@ -37,8 +41,8 @@ namespace TelegramBot
                 {
 
                     "/start" => this.Usage(Client, Message, Send),
-                    "/store_link" => this.StoreLink(Client, Message, Send),
-                    "/get_links" => this.GetLink(Client, Message, Send),
+                    "/store_link" => this.StoreLink(Client, Message, Send, usersDict),
+                    "/get_links" => this.GetLink(Client, Message, Send, usersDict),
 
                 });
             }
@@ -46,25 +50,25 @@ namespace TelegramBot
 
         public async Task Usage(ITelegramBotClient botClient, Message message, ICommand send)
         {
-            const string usage = "Функции:\n" +
-                                 "/store_link   - записать ссылку\n" +
-                                 "/get_links - получить ссылку\n";
-            TelegramCommandInput textInput = new TelegramCommandInput(botClient, message, usage);
+            StartCommand start = new StartCommand();
+            TelegramCommandInput textInput = new TelegramCommandInput(botClient, message, start.StartUse());
             await send.ExecuteAsync(textInput);
             return;
         }
 
-        public async Task StoreLink(ITelegramBotClient botClient, Message message, ICommand send)
+        public async Task StoreLink(ITelegramBotClient botClient, Message message, ICommand send, Dictionary<long, User> usersDict)
         {
-            string answer = await BotFunction.SaveLinks(message.Text!);
+            SaveLinksCommand save = new SaveLinksCommand();
+            string answer = await save.SaveLinks(message, usersDict);
             TelegramCommandInput textInput = new TelegramCommandInput(botClient, message, answer);
             await send.ExecuteAsync(textInput);
             return;
         }
 
-        public async Task GetLink(ITelegramBotClient botClient, Message message, ICommand send)
+        public async Task GetLink(ITelegramBotClient botClient, Message message, ICommand send, Dictionary<long, User> usersDict)
         {
-            string answer = BotFunction.GetLinks(message.Text!);
+            GetLinksCommand get = new GetLinksCommand();
+            string answer = await get.GetLinks(message, usersDict);
             TelegramCommandInput textInput = new TelegramCommandInput(botClient, message, answer);
             await send.ExecuteAsync(textInput);
             return;
