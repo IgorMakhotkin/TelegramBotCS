@@ -12,56 +12,18 @@ namespace TelegramBot
         private async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message, ICommand send)
         {
             Console.WriteLine($"Полученый тип сообщения: {message.Type} {message.MessageId} {message.Chat.Id}");
-                                 "/store_link   - записать ссылку\n" +
-                                 "/get_links - получить ссылку\n";
 
-            await send.SendMessage(usage, message, botClient);
-            return;
-        }
-
-        static async Task StoreLink(ITelegramBotClient botClient, Message message, ICommand send)
-        {
-            string answer = await BotFunction.SaveLinks(message.Text!);
-            await send.SendMessage(answer, message, botClient);
-            return;
-        }
-
-        static async Task GetLink(ITelegramBotClient botClient, Message message, ICommand send)
-        {
-            string answer = BotFunction.GetLinks(message.Text!);
-            await send.SendMessage(answer, message, botClient);
-            return;
-        }
-
-        private static async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message, ICommand send)
-        {
             if (message.Type != MessageType.Text)
             {
-                await send.SendMessage("Введите текст", message, botClient);
+                TelegramCommandInput textInput = new TelegramCommandInput(botClient, message, "Введите текст");
+                await send.ExecuteAsync(textInput);
                 return;
             }
 
-            if (BotFunction.SaveLinksFlag)
+            if (message.Type == MessageType.Text)
             {
                 CommandFactory factory = new CommandFactory(botClient, message);
                 await factory.NextStepAsync(message, usersDict);
-            }
-
-            if (BotFunction.GetLinksFlag)
-            {
-                await GetLink(botClient, message, send);
-                return;
-            }
-            else
-            {
-                var action = message.Text!.Split(' ')[0] switch
-                {
-
-                    "/start" => Usage(botClient, message, send),
-                    "/store_link" => StoreLink(botClient, message, send),
-                    "/get_links" => GetLink(botClient, message, send),
-
-                };
             }
 
             return;
@@ -72,7 +34,7 @@ namespace TelegramBot
             var errorMessage = exception switch
             {
                 ApiRequestException apiRequestException => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
-                _ => exception.ToString()
+                _ => exception.ToString(),
             };
 
             Console.WriteLine(errorMessage);
