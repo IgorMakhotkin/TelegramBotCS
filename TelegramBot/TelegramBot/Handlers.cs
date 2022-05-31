@@ -7,7 +7,7 @@ namespace TelegramBot
 {
     public class Handlers
     {
-        Dictionary<long, User> usersDict = new Dictionary<long, User>();
+        Dictionary<long, UserData> usersDict = new Dictionary<long, UserData>();
 
         private async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message, ICommand send)
         {

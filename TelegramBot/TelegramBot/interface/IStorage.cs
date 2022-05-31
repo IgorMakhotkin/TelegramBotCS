@@ -6,7 +6,7 @@ namespace TelegramBot
     {
         public string ReturnLinks(string key);
 
-        public Task<bool> AddLinksToStorage(string key, string value);
+        public Task<bool> AddLinksToStorage(string key, string value, long chatId);
 
     }
 }

@@ -4,9 +4,9 @@ namespace TelegramBot
 {
     public class SaveLinksCommand
     {
-        public async Task<string> SaveLinks(Message message, Dictionary<long, User> usersDict)
+        public async Task<string> SaveLinks(Message message, Dictionary<long, UserData> usersDict)
         {
-            User user = new User();
+            UserData user = new UserData();
             user = usersDict[message.Chat.Id];
             IStorage storage = new Storage();
             user.SaveLinksFlag = true;
@@ -35,7 +35,7 @@ namespace TelegramBot
                 usersDict.Remove(message.Chat.Id);
                 usersDict.Add(message.Chat.Id, user);
 
-                if (await storage.AddLinksToStorage(user.TempCategory, user.TempUrl))
+                if (await storage.AddLinksToStorage(user.TempCategory, user.TempUrl, message.Chat.Id))
                 {
                     user.SaveLinksStage2 = false;
                     user.SaveLinksFlag = false;

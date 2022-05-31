@@ -4,9 +4,9 @@ namespace TelegramBot
 {
     public class GetLinksCommand
     {
-        public async Task<string> GetLinks(Message message, Dictionary<long, User> usersDict)
+        public async Task<string> GetLinks(Message message, Dictionary<long, UserData> usersDict)
         {
-            User user = new User();
+            UserData user = new UserData();
             user = usersDict[message.Chat.Id];
             IStorage storage = new Storage();
             user.GetLinksFlag = true;

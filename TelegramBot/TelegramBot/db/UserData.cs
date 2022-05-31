@@ -1,6 +1,6 @@
 ﻿namespace TelegramBot
 {
-    public class User
+    public class UserData
     {
 
         public string? TempUrl { get; set; }

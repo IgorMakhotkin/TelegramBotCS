@@ -36,12 +36,13 @@
             }
         }
 
-        public async Task<bool> AddLinksToStorage(string key, string value)
+        public async Task<bool> AddLinksToStorage(string key, string value, long chatId)
         {
             using (DataBaseContext db = new DataBaseContext())
             {
                 Link saveLink = new Link()
                 {
+                    UserId = chatId,
                     Url = value,
                     Category = key,
                 };

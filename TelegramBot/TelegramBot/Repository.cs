@@ -19,9 +19,9 @@ namespace TelegramBot
             this.Send = send;
         }
 
-        public async Task ExecutAsync(Message message, Dictionary<long, User> usersDict)
+        public async Task ExecutAsync(Message message, Dictionary<long, UserData> usersDict)
         {
-            User user = new User();
+            UserData user = new UserData();
             user = usersDict[message.Chat.Id];
 
             if (user.SaveLinksFlag)
@@ -56,7 +56,7 @@ namespace TelegramBot
             return;
         }
 
-        public async Task StoreLink(ITelegramBotClient botClient, Message message, ICommand send, Dictionary<long, User> usersDict)
+        public async Task StoreLink(ITelegramBotClient botClient, Message message, ICommand send, Dictionary<long, UserData> usersDict)
         {
             SaveLinksCommand save = new SaveLinksCommand();
             string answer = await save.SaveLinks(message, usersDict);
@@ -65,7 +65,7 @@ namespace TelegramBot
             return;
         }
 
-        public async Task GetLink(ITelegramBotClient botClient, Message message, ICommand send, Dictionary<long, User> usersDict)
+        public async Task GetLink(ITelegramBotClient botClient, Message message, ICommand send, Dictionary<long, UserData> usersDict)
         {
             GetLinksCommand get = new GetLinksCommand();
             string answer = await get.GetLinks(message, usersDict);
