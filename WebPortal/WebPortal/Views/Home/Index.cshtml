@@ -1,0 +1,18 @@
+@using Microsoft.AspNetCore.Authentication
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div>
+        <p>Вы вошли как</p>
+        <h2>@User.Identity.Name</h2>
+        <p><a class="btn btn-dark" asp-controller="Account" asp-action="Logout">Sign out</a></p>
+    </div>
+}
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <div>
+        <p>Вы не вошли</p>
+        <p><a class="btn btn-sm btn-dark" asp-controller="Account" asp-action="Login">Sign in</a></p>
+    </div>
+}
