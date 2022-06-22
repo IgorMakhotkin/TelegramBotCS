@@ -4,6 +4,7 @@ using System.IO;
 using WebPortal.db;
 
 namespace WebPortal.db
+
 {
     public class DataBaseContext : DbContext
     {

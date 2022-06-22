@@ -1,3 +1,4 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Builder;
+using WebPortal.Logger;
+
 
 namespace WebPortal
 {
     public class Startup
     {
+
  
         public void ConfigureServices(IServiceCollection services)
         {
@@ -43,6 +48,11 @@ namespace WebPortal
             {
                 endpoints.MapDefaultControllerRoute();
             });
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "Logs"));
+
         }
     }
 }

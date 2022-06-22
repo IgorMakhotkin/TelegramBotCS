@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 namespace WebPortal.db
+
 {
     public class Link
     {
