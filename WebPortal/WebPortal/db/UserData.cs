@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace WebAplication1.db
+
+namespace WebPortal.db
+
 {
     public class UserData
     {

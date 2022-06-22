@@ -1,0 +1,40 @@
+﻿@model IEnumerable<WebPortal.db.Link>
+
+@{
+    ViewData["Title"] = "UserContent";
+}
+
+<h1>Таблица</h1>
+
+    <div>
+        <p>Вы вошли как </p>
+        <h2>@User.Identity.Name</h2>
+        <p><a class="btn btn-dark" asp-controller="Account" asp-action="Logout">Sign out</a></p>
+    </div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Url)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Url)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

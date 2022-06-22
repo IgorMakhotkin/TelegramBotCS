@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-using WebApplication1.db;
+using WebPortal.db;
 
-namespace WebAplication1.db
+namespace WebPortal.db
+
 {
     public class DataBaseContext : DbContext
     {
