@@ -1,4 +1,3 @@
-
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +8,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.Cookies;
-﻿using Microsoft.AspNetCore.Builder;
 using WebPortal.Logger;
+using WebPortal.AutoMapper;
+using AutoMapper;
 
 
 namespace WebPortal
 {
     public class Startup
     {
-
- 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
@@ -28,10 +26,17 @@ namespace WebPortal
                 {
                     options.LoginPath = "/account/login";
                 });
+
+              var mapperConfig = new MapperConfiguration(cfg =>
+              {
+                  cfg.AddProfile(new MappingProfile());
+              });
+              services.AddSingleton(mapperConfig.CreateMapper());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+
         {
 
             if (env.IsDevelopment())
@@ -44,15 +49,11 @@ namespace WebPortal
             app.UseRouting();
             app.UseAuthentication();
 
+            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "Logs"));
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
             });
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "Logs"));
-
         }
     }
 }
