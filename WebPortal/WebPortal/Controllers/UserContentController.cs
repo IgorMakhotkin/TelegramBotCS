@@ -21,6 +21,7 @@ namespace WebPortal.Controllers
         {
             _mapper = mapper;
         }
+
         public async Task<IActionResult> Index()
         {
             DataBaseContext context = new DataBaseContext();

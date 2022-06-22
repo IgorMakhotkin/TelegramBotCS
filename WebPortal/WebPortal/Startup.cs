@@ -12,11 +12,11 @@ using WebPortal.Logger;
 using WebPortal.AutoMapper;
 using AutoMapper;
 
+
 namespace WebPortal
 {
     public class Startup
     {
-     
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
@@ -36,6 +36,7 @@ namespace WebPortal
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+
         {
 
             if (env.IsDevelopment())
@@ -49,7 +50,6 @@ namespace WebPortal
             app.UseAuthentication();
 
             loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "Logs"));
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
